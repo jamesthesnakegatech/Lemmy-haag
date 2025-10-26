@@ -1,0 +1,21 @@
+{
+  # for more info about the config, check out the documentation
+  # https://join-lemmy.org/docs/en/administration/configuration.html
+
+  database: {
+    host: postgres
+    password: "changeme123"
+    # Alternative way:
+    #uri: "postgresql://lemmy:{{ postgres_password }}@postgres/lemmy"
+  }
+  hostname: "134.199.214.141"
+  pictrs: {
+    url: "http://pictrs:8080/"
+    api_key: "changeme123"
+  }
+  email: {
+    smtp_server: "postfix:25"
+    smtp_from_address: "noreply@134.199.214.141"
+    tls_type: "none"
+  }
+}

@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAAG - Conservation Technology Network</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fdf9 0%, #e8f4ea 100%);
+            line-height: 1.6;
+            color: #2d3436;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            border-bottom: 1px solid #e8f4ea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c7a3f;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-link {
+            color: #2c7a3f;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(44, 122, 63, 0.1);
+        }
+
+        .main-content {
+            display: flex;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .content-area {
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .view-toggles {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            padding: 6px;
+            gap: 6px;
+            box-shadow: 0 2px 12px rgba(44, 122, 63, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .toggle-btn {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            color: #636e72;
+        }
+
+        .toggle-btn.active {
+            background: #2c7a3f;
+            color: white;
+        }
+
+        .search-bar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 12px rgba(44, 122, 63, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 1rem;
+            border: 2px solid #e8f4ea;
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: #2c7a3f;
+            box-shadow: 0 0 0 4px rgba(44, 122, 63, 0.1);
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+
+        .item-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(44, 122, 63, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .item-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(44, 122, 63, 0.15);
+        }
+
+        .item-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .item-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #2c7a3f, #4a9d5f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .item-info h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2c7a3f;
+            margin-bottom: 4px;
+        }
+
+        .item-info p {
+            color: #636e72;
+            font-size: 0.9rem;
+        }
+
+        .item-description {
+            color: #636e72;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .item-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            background: linear-gradient(135deg, #2c7a3f, #4a9d5f);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tag:hover {
+            background: linear-gradient(135deg, #4a9d5f, #2c7a3f);
+            transform: translateY(-1px);
+        }
+
+        .item-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid #f1f3f4;
+        }
+
+        .stats {
+            display: flex;
+            gap: 16px;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #636e72;
+            font-size: 0.9rem;
+        }
+
+        .action-btn {
+            background: #2c7a3f;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background: #4a9d5f;
+            transform: translateY(-1px);
+        }
+
+        .sidebar-section {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(44, 122, 63, 0.08);
+        }
+
+        .sidebar-section h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2c7a3f;
+            margin-bottom: 16px;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 0;
+            color: #636e72;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e8f4ea;
+            border-left: 4px solid #2c7a3f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Badge System Styles */
+        .user-profile {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(44, 122, 63, 0.08);
+            margin-bottom: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2c7a3f, #4a9d5f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-right: 20px;
+        }
+
+        .profile-info h2 {
+            color: #2c7a3f;
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        .profile-info p {
+            color: #636e72;
+            margin-bottom: 8px;
+        }
+
+        .profile-level {
+            background: linear-gradient(135deg, #ff6b35, #ff8c42);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badges-section {
+            margin-top: 20px;
+        }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .badge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 16px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f8fdf9, #e8f4ea);
+            border: 2px solid #e8f4ea;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .badge.earned {
+            background: linear-gradient(135deg, #2c7a3f, #4a9d5f);
+            color: white;
+            border-color: #2c7a3f;
+        }
+
+        .badge.earned::after {
+            content: '✨';
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            font-size: 0.8rem;
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .badge-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .badge-progress {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .badge-progress-fill {
+            height: 100%;
+            background: #ff6b35;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+
+        .leaderboard {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(44, 122, 63, 0.08);
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f3f4;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-rank {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #2c7a3f;
+            width: 30px;
+        }
+
+        .leaderboard-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2c7a3f, #4a9d5f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin: 0 12px;
+        }
+
+        .leaderboard-info {
+            flex: 1;
+        }
+
+        .leaderboard-name {
+            font-weight: 600;
+            color: #2d3436;
+        }
+
+        .leaderboard-specialty {
+            font-size: 0.8rem;
+            color: #636e72;
+        }
+
+        .leaderboard-score {
+            font-weight: 700;
+            color: #2c7a3f;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+            }
+            
+            .items-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .badges-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">HAAG</a>
+                <nav class="nav-links">
+                    <a href="#" class="nav-link" onclick="showView('posts')">Posts</a>
+                    <a href="#" class="nav-link" onclick="showView('communities')">Communities</a>
+                    <a href="#" class="nav-link" onclick="showView('profiles')">Researchers</a>
+                    <a href="https://134.199.214.141" class="nav-link">Forum</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="main-content">
+            <div class="content-area">
+                <div class="view-toggles">
+                    <button class="toggle-btn active" onclick="showView('posts')" id="posts-btn">📝 Posts</button>
+                    <button class="toggle-btn" onclick="showView('communities')" id="communities-btn">🏛️ Communities</button>
+                    <button class="toggle-btn" onclick="showView('profiles')" id="profiles-btn">👥 Researchers</button>
+                </div>
+
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search posts, communities, or researchers...">
+                </div>
+
+                <div id="loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading content...</p>
+                </div>
+
+                <div id="posts-view" class="items-grid" style="display: none;"></div>
+                <div id="communities-view" class="items-grid" style="display: none;"></div>
+                <div id="profiles-view" class="items-grid" style="display: none;"></div>
+            </div>
+
+            <div class="sidebar">
+                <div class="sidebar-section">
+                    <h3>🏷️ Popular Tags</h3>
+                    <div class="tag-list" id="popularTags"></div>
+                </div>
+
+                <div class="leaderboard">
+                    <h3>🏆 Research Leaders</h3>
+                    <div id="leaderboard"></div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>🌟 Featured Researchers</h3>
+                    <div id="featuredResearchers"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE = 'http://134.199.214.141';
+        
+        let allPosts = [];
+        let allCommunities = [];
+        let currentView = 'posts';
+        
+        // Predefined conservation tags
+        const conservationTags = [
+            'camera-traps', 'machine-learning', 'acoustic-monitoring', 'wildlife-tracking',
+            'biodiversity', 'habitat-restoration', 'species-identification', 'ecosystem-monitoring',
+            'conservation-tech', 'field-research', 'data-analysis', 'remote-sensing',
+            'ai-conservation', 'wildlife-corridors', 'endangered-species', 'climate-change',
+            'forest-conservation', 'marine-biology', 'ornithology', 'mammalogy'
+        ];
+
+        // Badge definitions
+        const badgeDefinitions = {
+            'research-pioneer': { name: 'Research Pioneer', icon: '🔬', description: 'Started 5+ research discussions' },
+            'data-analyst': { name: 'Data Analyst', icon: '📊', description: 'Posted 10+ data analysis insights' },
+            'field-expert': { name: 'Field Expert', icon: '🌲', description: 'Shared field research experiences' },
+            'tech-innovator': { name: 'Tech Innovator', icon: '💡', description: 'Contributed technology solutions' },
+            'community-builder': { name: 'Community Builder', icon: '🤝', description: 'Active in 5+ communities' },
+            'mentor': { name: 'Mentor', icon: '👨‍🏫', description: 'Helped 20+ researchers' },
+            'conservation-hero': { name: 'Conservation Hero', icon: '🦋', description: 'Made significant conservation impact' },
+            'ml-specialist': { name: 'ML Specialist', icon: '🤖', description: 'Machine learning expertise' },
+            'progress-tracker': { name: 'Progress Tracker', icon: '📈', description: 'Research progress tracking specialist' },
+            'gamification-expert': { name: 'Gamification Expert', icon: '🎮', description: 'Gamification and engagement specialist' }
+        };
+
+        // User profiles with specializations
+        const researcherProfiles = [
+            {
+                id: 'dima',
+                name: 'Dima',
+                specialty: 'Research Progress Tracking',
+                level: 'Expert',
+                avatar: 'D',
+                badges: ['research-pioneer', 'data-analyst', 'progress-tracker', 'mentor'],
+                posts: 15,
+                communities: 8,
+                score: 1250,
+                bio: 'Specializing in research progress tracking systems and methodology optimization for conservation projects.'
+            },
+            {
+                id: 'leyang',
+                name: 'Leyang',
+                specialty: 'Gamification & Engagement',
+                level: 'Expert', 
+                avatar: 'L',
+                badges: ['tech-innovator', 'community-builder', 'gamification-expert', 'ml-specialist'],
+                posts: 12,
+                communities: 6,
+                score: 1100,
+                bio: 'Expert in gamification systems and user engagement strategies for scientific communities.'
+            },
+            {
+                id: 'jamesthesnake',
+                name: 'jamesthesnake',
+                specialty: 'Conservation Technology',
+                level: 'Admin',
+                avatar: 'J',
+                badges: ['research-pioneer', 'tech-innovator', 'conservation-hero', 'community-builder'],
+                posts: 3,
+                communities: 3,
+                score: 950,
+                bio: 'Conservation technology researcher focusing on AI applications in wildlife monitoring.'
+            }
+        ];
+
+        async function loadData() {
+            try {
+                // Load posts
+                const postsResponse = await fetch(`${API_BASE}/api/v3/post/list?limit=50`);
+                const postsData = await postsResponse.json();
+                allPosts = postsData.posts || [];
+
+                // Load communities  
+                const communitiesResponse = await fetch(`${API_BASE}/api/v3/community/list?limit=50`);
+                const communitiesData = await communitiesResponse.json();
+                allCommunities = communitiesData.communities || [];
+
+                displayContent();
+                setupSearch();
+                displaySidebar();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showError('Failed to load content. Please try again later.');
+            }
+        }
+
+        function extractTags(text) {
+            if (!text) return [];
+            const words = text.toLowerCase().split(/[\\s,.-]+/);
+            return conservationTags.filter(tag => 
+                words.some(word => word.includes(tag) || tag.includes(word))
+            );
+        }
+
+        function showView(view) {
+            currentView = view;
+            
+            // Update button states
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`${view}-btn`).classList.add('active');
+            
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            displayContent();
+        }
+
+        function displayContent() {
+            const loading = document.getElementById('loading');
+            const postsView = document.getElementById('posts-view');
+            const communitiesView = document.getElementById('communities-view');
+            const profilesView = document.getElementById('profiles-view');
+            
+            // Hide all views
+            postsView.style.display = 'none';
+            communitiesView.style.display = 'none';
+            profilesView.style.display = 'none';
+            loading.style.display = 'none';
+            
+            if (currentView === 'posts') {
+                displayPosts();
+                postsView.style.display = 'grid';
+            } else if (currentView === 'communities') {
+                displayCommunities();
+                communitiesView.style.display = 'grid';
+            } else if (currentView === 'profiles') {
+                displayProfiles();
+                profilesView.style.display = 'grid';
+            }
+        }
+
+        function displayPosts() {
+            const container = document.getElementById('posts-view');
+            container.innerHTML = '';
+            
+            allPosts.forEach(item => {
+                const post = item.post;
+                const creator = item.creator;
+                const community = item.community;
+                const counts = item.counts;
+                
+                const tags = extractTags(`${post.name} ${post.body || ''}`);
+                
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.onclick = () => window.open(`${API_BASE}/post/${post.id}`, '_blank');
+                
+                card.innerHTML = `
+                    <div class="item-header">
+                        <div class="item-icon">${post.name.charAt(0).toUpperCase()}</div>
+                        <div class="item-info">
+                            <h3>${post.name}</h3>
+                            <p>by ${creator.name} in ${community.title || community.name}</p>
+                        </div>
+                    </div>
+                    <div class="item-description">
+                        ${post.body || 'Click to read more about this research post...'}
+                    </div>
+                    <div class="item-tags">
+                        ${tags.map(tag => `<span class="tag" onclick="event.stopPropagation(); filterByTag('${tag}')">#${tag}</span>`).join('')}
+                    </div>
+                    <div class="item-stats">
+                        <div class="stats">
+                            <div class="stat">
+                                <span>👍</span>
+                                <span>${counts.score}</span>
+                            </div>
+                            <div class="stat">
+                                <span>💬</span>
+                                <span>${counts.comments}</span>
+                            </div>
+                        </div>
+                        <button class="action-btn" onclick="event.stopPropagation(); window.open('${API_BASE}/post/${post.id}', '_blank')">
+                            Read More
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        function displayCommunities() {
+            const container = document.getElementById('communities-view');
+            container.innerHTML = '';
+            
+            allCommunities.forEach((item, index) => {
+                const community = item.community;
+                const counts = item.counts;
+                
+                const card = document.createElement('div');
+                card.className = `item-card ${index === 0 ? 'featured' : ''}`;
+                card.onclick = () => window.open(`${API_BASE}/c/${community.name}`, '_blank');
+                
+                const iconLetter = community.title ? community.title.charAt(0).toUpperCase() : 'C';
+                
+                card.innerHTML = `
+                    <div class="item-header">
+                        <div class="item-icon">${iconLetter}</div>
+                        <div class="item-info">
+                            <h3>${community.title || community.name}</h3>
+                            <p>@${community.name}</p>
+                        </div>
+                    </div>
+                    <div class="item-description">
+                        ${community.description || 'A vibrant community for sharing knowledge and connecting with fellow conservationists.'}
+                    </div>
+                    <div class="item-stats">
+                        <div class="stats">
+                            <div class="stat">
+                                <span>👥</span>
+                                <span>${counts.subscribers || 0} members</span>
+                            </div>
+                            <div class="stat">
+                                <span>📝</span>
+                                <span>${counts.posts || 0} posts</span>
+                            </div>
+                        </div>
+                        <button class="action-btn" onclick="event.stopPropagation(); window.open('${API_BASE}/c/${community.name}', '_blank')">
+                            Visit
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Fetch leaderboard data from badge API
+        async function fetchLeaderboard(container) {
+            try {
+                container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">🏆 Loading leaderboard...</div>';
+                
+                const response = await fetch('/api/badges/leaderboard');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const leaderboard = data.leaderboard || [];
+                
+                if (leaderboard.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">No leaderboard data available</div>';
+                    return;
+                }
+                
+                container.innerHTML = leaderboard.map((user, index) => `
+                    <div class="leaderboard-item">
+                        <div class="leaderboard-rank">${index + 1}</div>
+                        <div class="leaderboard-avatar">${(user.display_name || user.username).charAt(0).toUpperCase()}</div>
+                        <div class="leaderboard-info">
+                            <div class="leaderboard-name">${user.display_name || user.username}</div>
+                            <div class="leaderboard-specialty">${user.badge_count} badges • ${user.research_badges} research • ${user.community_badges} community</div>
+                        </div>
+                        <div class="leaderboard-score">⭐ ${user.total_karma}</div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error fetching leaderboard:', error);
+                container.innerHTML = '<div style="text-align: center; padding: 20px; color: #e74c3c;">⚠️ Failed to load leaderboard</div>';
+            }
+        }
+
+        async function displayProfiles() {
+            const container = document.getElementById('profiles-view');
+            container.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">🏆 Loading researchers...</div>';
+            
+            try {
+                // Fetch leaderboard data to get real users with badges and karma
+                const response = await fetch('/api/badges/leaderboard');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const researchers = data.leaderboard || [];
+                
+                if (researchers.length === 0) {
+                    container.innerHTML = '<div style="text-align: center; padding: 40px; color: #666;">No researchers found</div>';
+                    return;
+                }
+                
+                container.innerHTML = '';
+                
+                // Create profile cards for each researcher
+                for (const researcher of researchers) {
+                    try {
+                        // Fetch detailed badge data for each researcher
+                        const badgeResponse = await fetch(`/api/badges/user/${researcher.username}`);
+                        const badgeData = badgeResponse.ok ? await badgeResponse.json() : { badges: [] };
+                        const userBadges = badgeData.badges || [];
+                        
+                        const card = document.createElement('div');
+                        card.className = 'user-profile';
+                        
+                        // Determine specialty based on badges
+                        let specialty = 'Researcher';
+                        if (researcher.research_badges > 0) specialty = 'Research Specialist';
+                        if (researcher.technology_badges > 0) specialty = 'Technology Expert';
+                        if (researcher.admin_badges > 0) specialty = 'HAAG Administrator';
+                        if (researcher.community_badges > 0 && researcher.research_badges > 0) specialty = 'Community Research Leader';
+                        
+                        // Determine level based on karma and badges
+                        let level = 'Beginner';
+                        if (researcher.total_karma > 100) level = 'Intermediate';
+                        if (researcher.total_karma > 300) level = 'Advanced';
+                        if (researcher.total_karma > 500) level = 'Expert';
+                        if (researcher.total_karma > 1000) level = 'Master';
+                        
+                        card.innerHTML = `
+                            <div class="profile-header">
+                                <div class="profile-avatar">${(researcher.display_name || researcher.username).charAt(0).toUpperCase()}</div>
+                                <div class="profile-info">
+                                    <h2>${researcher.display_name || researcher.username}</h2>
+                                    <p><strong>${specialty}</strong></p>
+                                    <p>Active researcher contributing to conservation technology and community science initiatives.</p>
+                                    <span class="profile-level">Level: ${level}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="badges-section">
+                                <h3>🏆 Earned Badges</h3>
+                                <div class="badges-grid">
+                                    ${userBadges.length > 0 ? userBadges.map(badge => 
+                                        `<div class="badge earned" title="${badge.badge_description}">
+                                            <div class="badge-icon">${badge.badge_icon}</div>
+                                            <div class="badge-name">${badge.badge_name}</div>
+                                        </div>`
+                                    ).join('') : '<div style="color: #666; font-style: italic; padding: 20px;">No badges yet</div>'}
+                                </div>
+                            </div>
+                            
+                            <div class="item-stats">
+                                <div class="stats">
+                                    <div class="stat">
+                                        <span>⭐</span>
+                                        <span>${researcher.total_karma} karma</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span>🏆</span>
+                                        <span>${researcher.badge_count} badges</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span>👍</span>
+                                        <span>${researcher.post_upvotes + researcher.comment_upvotes} upvotes</span>
+                                    </div>
+                                </div>
+                                <button class="action-btn" onclick="window.open('/u/${researcher.username}', '_blank')">
+                                    View Profile
+                                </button>
+                            </div>
+                        `;
+                        
+                        container.appendChild(card);
+                    } catch (error) {
+                        console.error(`Error loading profile for ${researcher.username}:`, error);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error fetching researchers:', error);
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #e74c3c;">⚠️ Failed to load researchers</div>';
+            }
+        }
+
+        function displaySidebar() {
+            // Popular tags
+            const tagsContainer = document.getElementById('popularTags');
+            const shuffledTags = [...conservationTags].sort(() => 0.5 - Math.random()).slice(0, 12);
+            tagsContainer.innerHTML = shuffledTags.map(tag => 
+                `<span class="tag" onclick="filterByTag('${tag}')">#${tag}</span>`
+            ).join('');
+            
+            // Leaderboard - fetch from API
+            const leaderboardContainer = document.getElementById('leaderboard');
+            fetchLeaderboard(leaderboardContainer);
+            
+            // Featured researchers  
+            const featuredContainer = document.getElementById('featuredResearchers');
+            featuredContainer.innerHTML = `
+                <p><strong>🔬 Dima</strong> - Leading research in progress tracking methodologies</p>
+                <p><strong>🎮 Leyang</strong> - Innovating gamification for scientific engagement</p>
+            `;
+        }
+
+        function filterByTag(tag) {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = `#${tag}`;
+            performSearch();
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', performSearch);
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.item-card, .user-profile');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(query) || query === '') {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function showError(message) {
+            const loading = document.getElementById('loading');
+            loading.innerHTML = `
+                <div style="color: #dc3545; font-size: 1.1rem; margin-bottom: 16px;">⚠️ ${message}</div>
+                <button onclick="location.reload()" class="action-btn">Try Again</button>
+            `;
+        }
+
+        // Initialize
+        loadData();
+    </script>
+</body>
+</html>

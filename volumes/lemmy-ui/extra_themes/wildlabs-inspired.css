@@ -1,0 +1,274 @@
+/* Wildlabs-Inspired Community Cards Theme */
+/* Transform Lemmy communities into beautiful card-based layout */
+
+:root {
+  --primary-color: #2c7a3f;
+  --primary-light: #4a9d5f;
+  --accent-color: #ff6b35;
+  --background: #f8faf9;
+  --card-background: #ffffff;
+  --text-primary: #2d3436;
+  --text-secondary: #636e72;
+  --shadow-light: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-medium: 0 4px 16px rgba(0,0,0,0.12);
+  --border-radius: 12px;
+}
+
+/* Global background improvements */
+body {
+  background-color: var(--background) !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* Communities page specific styling */
+.communities-listing,
+.community-list {
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* Transform community items into cards */
+.community-link,
+.community-item,
+.card:has(.community-link) {
+  background: var(--card-background) !important;
+  border: 1px solid #e8f4ea !important;
+  border-radius: var(--border-radius) !important;
+  margin-bottom: 20px !important;
+  padding: 24px !important;
+  box-shadow: var(--shadow-light) !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.community-link:hover,
+.community-item:hover,
+.card:has(.community-link):hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-medium) !important;
+  border-color: var(--primary-light) !important;
+}
+
+/* Grid layout for communities */
+.communities {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)) !important;
+  gap: 24px !important;
+  padding: 20px !important;
+}
+
+/* Community card content styling */
+.community-link h5,
+.community-title {
+  color: var(--primary-color) !important;
+  font-weight: 700 !important;
+  font-size: 1.25rem !important;
+  margin-bottom: 8px !important;
+  line-height: 1.3 !important;
+}
+
+.community-link .text-muted,
+.community-description {
+  color: var(--text-secondary) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+  margin-bottom: 16px !important;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Community stats styling */
+.community-stats,
+.text-muted:not(.community-description) {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  margin-top: auto !important;
+  font-size: 0.875rem !important;
+  color: var(--text-secondary) !important;
+}
+
+.community-stats > span {
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+/* Add icons to stats */
+.community-stats > span:first-child::before {
+  content: "👥";
+  margin-right: 4px;
+}
+
+.community-stats > span:nth-child(2)::before {
+  content: "📝";
+  margin-right: 4px;
+}
+
+.community-stats > span:last-child::before {
+  content: "💬";
+  margin-right: 4px;
+}
+
+/* Community avatar/icon styling */
+.community-icon,
+.avatar-overlay {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 8px !important;
+  margin-right: 16px !important;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light)) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 1.2rem !important;
+  flex-shrink: 0 !important;
+}
+
+/* Join/Subscribe button styling */
+.btn-outline-secondary,
+.community-actions .btn {
+  background: var(--primary-color) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-outline-secondary:hover,
+.community-actions .btn:hover {
+  background: var(--primary-light) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Header styling */
+.communities-header h1,
+.page-title {
+  color: var(--text-primary) !important;
+  font-weight: 700 !important;
+  font-size: 2rem !important;
+  margin-bottom: 8px !important;
+}
+
+.communities-header p,
+.page-subtitle {
+  color: var(--text-secondary) !important;
+  font-size: 1.1rem !important;
+  margin-bottom: 32px !important;
+}
+
+/* Search and filter styling */
+.form-control {
+  border: 2px solid #e8f4ea !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  font-size: 0.95rem !important;
+  transition: border-color 0.2s ease !important;
+}
+
+.form-control:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 0.2rem rgba(44, 122, 63, 0.25) !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .communities {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding: 16px !important;
+  }
+  
+  .community-link,
+  .community-item,
+  .card:has(.community-link) {
+    padding: 20px !important;
+  }
+  
+  .community-link h5,
+  .community-title {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* Featured community highlight */
+.community-link:first-child,
+.community-item:first-child {
+  background: linear-gradient(135deg, #f8fdf9, #e8f4ea) !important;
+  border-color: var(--primary-light) !important;
+}
+
+.community-link:first-child::before,
+.community-item:first-child::before {
+  content: "⭐ Featured";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--accent-color);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Loading states */
+.spinner-border {
+  color: var(--primary-color) !important;
+}
+
+/* Empty state styling */
+.empty-state {
+  text-align: center !important;
+  padding: 60px 20px !important;
+  color: var(--text-secondary) !important;
+}
+
+.empty-state h3 {
+  color: var(--text-primary) !important;
+  margin-bottom: 16px !important;
+}
+
+/* Sidebar improvements */
+.col-md-4 .card {
+  background: var(--card-background) !important;
+  border: 1px solid #e8f4ea !important;
+  border-radius: var(--border-radius) !important;
+  box-shadow: var(--shadow-light) !important;
+}
+
+/* Navigation improvements */
+.navbar {
+  background: rgba(248, 250, 249, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid #e8f4ea !important;
+}
+
+.navbar-brand,
+.nav-link {
+  color: var(--text-primary) !important;
+}
+
+.nav-link:hover {
+  color: var(--primary-color) !important;
+}
+
+/* Card hover effects */
+@keyframes cardPulse {
+  0% { box-shadow: var(--shadow-light); }
+  50% { box-shadow: var(--shadow-medium); }
+  100% { box-shadow: var(--shadow-light); }
+}
+
+.community-link:hover,
+.community-item:hover {
+  animation: cardPulse 2s infinite;
+}

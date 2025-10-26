@@ -1,0 +1,227 @@
+/* Wildlabs-Improved Community Cards Theme */
+/* A better, more compatible theme for Lemmy communities */
+
+:root {
+  --primary-green: #2c7a3f;
+  --primary-light: #4a9d5f;
+  --accent-orange: #ff6b35;
+  --background-light: #f8faf9;
+  --card-white: #ffffff;
+  --text-dark: #2d3436;
+  --text-muted: #636e72;
+  --border-light: #e8f4ea;
+  --shadow-soft: 0 2px 12px rgba(44, 122, 63, 0.08);
+  --shadow-hover: 0 8px 25px rgba(44, 122, 63, 0.15);
+  --radius: 12px;
+}
+
+/* Global improvements */
+body {
+  background-color: var(--background-light) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Main container styling */
+.container-lg {
+  background-color: var(--background-light) !important;
+}
+
+/* Community listings - make them cards */
+.row .col-md-8 .card,
+.post-listings .card,
+.community-listing .card {
+  background: var(--card-white) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-soft) !important;
+  margin-bottom: 20px !important;
+  padding: 24px !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.row .col-md-8 .card:hover,
+.post-listings .card:hover,
+.community-listing .card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-hover) !important;
+  border-color: var(--primary-light) !important;
+}
+
+/* Transform community links into better cards */
+.post-listing,
+.community-link,
+a[href*="/c/"] {
+  display: block !important;
+  background: var(--card-white) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-soft) !important;
+  margin-bottom: 16px !important;
+  padding: 20px !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+  position: relative;
+}
+
+.post-listing:hover,
+.community-link:hover,
+a[href*="/c/"]:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: var(--shadow-hover) !important;
+  border-color: var(--primary-light) !important;
+  text-decoration: none !important;
+}
+
+/* Community titles */
+h5,
+.h5,
+.community-name,
+.post-listing h5 {
+  color: var(--primary-green) !important;
+  font-weight: 700 !important;
+  font-size: 1.25rem !important;
+  margin-bottom: 8px !important;
+  line-height: 1.3 !important;
+}
+
+/* Community descriptions */
+.text-muted,
+.community-description,
+.post-listing .text-muted {
+  color: var(--text-muted) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.5 !important;
+  margin-bottom: 12px !important;
+}
+
+/* Buttons */
+.btn-outline-secondary,
+.btn-secondary {
+  background: var(--primary-green) !important;
+  color: white !important;
+  border: 2px solid var(--primary-green) !important;
+  border-radius: 8px !important;
+  padding: 8px 16px !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-outline-secondary:hover,
+.btn-secondary:hover {
+  background: var(--primary-light) !important;
+  border-color: var(--primary-light) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Stats and metadata */
+.badge,
+.text-muted small {
+  background: linear-gradient(135deg, var(--primary-green), var(--primary-light)) !important;
+  color: white !important;
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+}
+
+/* Page headers */
+h1, h2, h3 {
+  color: var(--text-dark) !important;
+  font-weight: 700 !important;
+}
+
+/* Sidebar improvements */
+.col-md-4 .card {
+  background: var(--card-white) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: var(--radius) !important;
+  box-shadow: var(--shadow-soft) !important;
+}
+
+/* Navigation */
+.navbar {
+  background: rgba(248, 250, 249, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid var(--border-light) !important;
+}
+
+/* Forms */
+.form-control, .form-select {
+  border: 2px solid var(--border-light) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  transition: border-color 0.2s ease !important;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--primary-green) !important;
+  box-shadow: 0 0 0 0.2rem rgba(44, 122, 63, 0.25) !important;
+}
+
+/* Community page specific */
+.community-title {
+  color: var(--primary-green) !important;
+  font-weight: 700 !important;
+  margin-bottom: 16px !important;
+}
+
+/* Create a grid layout for communities */
+@media (min-width: 768px) {
+  .post-listings,
+  .community-listings {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+    gap: 20px !important;
+    padding: 20px 0 !important;
+  }
+}
+
+/* Featured community highlight */
+.post-listing:first-child::before,
+.community-link:first-child::before {
+  content: "⭐ Featured";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--accent-orange);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 1;
+}
+
+/* Loading improvements */
+.spinner-border {
+  color: var(--primary-green) !important;
+}
+
+/* Link colors */
+a {
+  color: var(--primary-green) !important;
+}
+
+a:hover {
+  color: var(--primary-light) !important;
+}
+
+/* Better spacing */
+.mb-3 {
+  margin-bottom: 1.5rem !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .post-listing,
+  .community-link {
+    padding: 16px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  h5, .h5 {
+    font-size: 1.1rem !important;
+  }
+}
