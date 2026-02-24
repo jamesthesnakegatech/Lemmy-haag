@@ -1,12 +1,14 @@
 {
   # for more info about the config, check out the documentation
   # https://join-lemmy.org/docs/en/administration/configuration.html
+  #
+  # IMPORTANT: Update the values below to match your .env file.
+  # hjson does not support environment variable interpolation,
+  # so these must be kept in sync manually.
 
   database: {
     host: postgres
     password: "changeme123"
-    # Alternative way:
-    #uri: "postgresql://lemmy:{{ postgres_password }}@postgres/lemmy"
   }
   hostname: "134.199.214.141"
   pictrs: {

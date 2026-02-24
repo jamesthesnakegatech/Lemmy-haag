@@ -40,7 +40,7 @@ services:
     image: dessalines/lemmy-ui:0.19.12
     environment:
       - LEMMY_UI_LEMMY_INTERNAL_HOST=lemmy:8536
-      - LEMMY_UI_LEMMY_EXTERNAL_HOST=134.199.214.141
+      - LEMMY_UI_LEMMY_EXTERNAL_HOST=${HOSTNAME}
       - LEMMY_UI_HTTPS=false
     volumes:
       - ./volumes/lemmy-ui/extra_themes:/app/extra_themes
@@ -53,11 +53,9 @@ services:
     image: asonix/pictrs:0.5.19
     # this needs to match the pictrs url in lemmy.hjson
     hostname: pictrs
-    # we can set options to pictrs like this, here we set max. image size and forced format for conversion
-    # entrypoint: /sbin/tini -- /usr/local/bin/pict-rs -p /mnt -m 4 --image-format webp
     environment:
       - PICTRS_OPENTELEMETRY_URL=http://otel:4137
-      - PICTRS__SERVER__API_KEY=changeme123
+      - PICTRS__SERVER__API_KEY=${PICTRS_API_KEY}
       - RUST_BACKTRACE=full
       - PICTRS__MEDIA__VIDEO__VIDEO_CODEC=vp9
       - PICTRS__MEDIA__ANIMATION__MAX_WIDTH=256
@@ -74,19 +72,20 @@ services:
     hostname: postgres
     environment:
       - POSTGRES_USER=lemmy
-      - POSTGRES_PASSWORD=changeme123
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=lemmy
     shm_size: 1g
     volumes:
       - ./volumes/postgres:/var/lib/postgresql/data:Z
       - ./customPostgresql.conf:/etc/postgresql.conf
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     restart: always
     logging: *default-logging
 
   postfix:
     image: mwader/postfix-relay
     environment:
-      - POSTFIX_myhostname=134.199.214.141
+      - POSTFIX_myhostname=${HOSTNAME}
     restart: "always"
     logging: *default-logging
 
@@ -94,10 +93,10 @@ services:
     image: ghcr.io/sheodox/alexandrite:latest
     hostname: alexandrite
     environment:
-      - ALEXANDRITE_DEFAULT_INSTANCE=134.199.214.141
+      - ALEXANDRITE_DEFAULT_INSTANCE=${HOSTNAME}
       - ALEXANDRITE_WELCOME_LEMMY_HELP=false
       - ALEXANDRITE_WELCOME_INSTANCE_HELP=false
-      - ALEXANDRITE_FORCE_INSTANCE=134.199.214.141
+      - ALEXANDRITE_FORCE_INSTANCE=${HOSTNAME}
     restart: always
     logging: *default-logging
 
@@ -134,12 +133,13 @@ services:
     ports:
       - "3001:3001"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV:-production}
       - DB_HOST=postgres
       - DB_PORT=5432
       - DB_NAME=lemmy
       - DB_USER=lemmy
-      - DB_PASS=changeme123
+      - DB_PASS=${POSTGRES_PASSWORD}
+      - BADGE_API_KEY=${BADGE_API_KEY}
     depends_on:
       - postgres
     restart: always
