@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HAAG Communities - Conservation Technology Network</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f8fdf9 0%, #e8f4ea 100%);
+            line-height: 1.6;
+            color: #2d3436;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            border-bottom: 1px solid #e8f4ea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2c7a3f;
+            text-decoration: none;
+        }
+
+        .nav-link {
+            color: #2c7a3f;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(44, 122, 63, 0.1);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #2c7a3f;
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: #636e72;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .search-bar {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 16px 24px;
+            font-size: 1rem;
+            border: 2px solid #e8f4ea;
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .search-bar input:focus {
+            border-color: #2c7a3f;
+            box-shadow: 0 0 0 4px rgba(44, 122, 63, 0.1);
+        }
+
+        .communities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .community-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(44, 122, 63, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .community-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(44, 122, 63, 0.15);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .community-card.featured::before {
+            content: '⭐ Featured';
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #ff6b35;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .community-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .community-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #2c7a3f, #4a9d5f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .community-info h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2c7a3f;
+            margin-bottom: 4px;
+        }
+
+        .community-info p {
+            color: #636e72;
+            font-size: 0.9rem;
+        }
+
+        .community-description {
+            color: #636e72;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .community-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid #f1f3f4;
+        }
+
+        .stats {
+            display: flex;
+            gap: 16px;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #636e72;
+            font-size: 0.9rem;
+        }
+
+        .join-btn {
+            background: #2c7a3f;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .join-btn:hover {
+            background: #4a9d5f;
+            transform: translateY(-1px);
+            text-decoration: none;
+            color: white;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 0;
+            color: #636e72;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e8f4ea;
+            border-left: 4px solid #2c7a3f;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 1px solid #e8f4ea;
+            color: #636e72;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .communities-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .community-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="/" class="logo">HAAG</a>
+                <nav>
+                    <a href="https://134.199.214.141" class="nav-link">Forum</a>
+                    <a href="https://134.199.214.141:8443" class="nav-link">Classic View</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Conservation Communities</h1>
+            <p>Connect with researchers, conservationists, and technology experts working to protect our planet's biodiversity.</p>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search communities...">
+            </div>
+        </div>
+    </section>
+
+    <main class="container">
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading communities...</p>
+        </div>
+        <div id="communities" class="communities-grid" style="display: none;"></div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 HAAG Conservation Network. Connecting the global conservation technology community.</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = 'https://134.199.214.141';
+        
+        async function loadCommunities() {
+            try {
+                const response = await fetch(`${API_BASE}/api/v3/community/list?limit=50`);
+                const data = await response.json();
+                
+                if (data.communities) {
+                    displayCommunities(data.communities);
+                } else {
+                    showError('No communities found');
+                }
+            } catch (error) {
+                console.error('Error loading communities:', error);
+                showError('Failed to load communities. Please try again later.');
+            }
+        }
+
+        function displayCommunities(communities) {
+            const container = document.getElementById('communities');
+            const loading = document.getElementById('loading');
+            
+            container.innerHTML = '';
+            
+            communities.forEach((item, index) => {
+                const community = item.community;
+                const counts = item.counts;
+                
+                const card = document.createElement('a');
+                card.className = `community-card ${index === 0 ? 'featured' : ''}`;
+                card.href = `${API_BASE}/c/${community.name}`;
+                card.target = '_blank';
+                
+                const iconLetter = community.title ? community.title.charAt(0).toUpperCase() : 'C';
+                
+                card.innerHTML = `
+                    <div class="community-header">
+                        <div class="community-icon">${iconLetter}</div>
+                        <div class="community-info">
+                            <h3>${community.title || community.name}</h3>
+                            <p>@${community.name}</p>
+                        </div>
+                    </div>
+                    <div class="community-description">
+                        ${community.description || 'A vibrant community for sharing knowledge and connecting with fellow conservationists.'}
+                    </div>
+                    <div class="community-stats">
+                        <div class="stats">
+                            <div class="stat">
+                                <span>👥</span>
+                                <span>${counts.subscribers || 0} members</span>
+                            </div>
+                            <div class="stat">
+                                <span>📝</span>
+                                <span>${counts.posts || 0} posts</span>
+                            </div>
+                        </div>
+                        <button class="join-btn" onclick="event.preventDefault(); window.open('${API_BASE}/c/${community.name}', '_blank')">
+                            Visit
+                        </button>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+            
+            loading.style.display = 'none';
+            container.style.display = 'grid';
+            
+            // Add search functionality
+            setupSearch(communities);
+        }
+
+        function setupSearch(communities) {
+            const searchInput = document.getElementById('searchInput');
+            
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const cards = document.querySelectorAll('.community-card');
+                
+                cards.forEach((card, index) => {
+                    const community = communities[index].community;
+                    const title = (community.title || community.name).toLowerCase();
+                    const description = (community.description || '').toLowerCase();
+                    
+                    if (title.includes(query) || description.includes(query)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        function showError(message) {
+            const loading = document.getElementById('loading');
+            loading.innerHTML = `
+                <div style="color: #dc3545; font-size: 1.1rem; margin-bottom: 16px;">⚠️ ${message}</div>
+                <button onclick="location.reload()" style="background: #2c7a3f; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer;">
+                    Try Again
+                </button>
+            `;
+        }
+
+        // Load communities when page loads
+        loadCommunities();
+    </script>
+</body>
+</html>

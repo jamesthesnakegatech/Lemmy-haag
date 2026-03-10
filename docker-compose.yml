@@ -1,0 +1,146 @@
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "50m"
+    max-file: "4"
+
+services:
+  proxy:
+    image: nginx:1-alpine
+    ports:
+      # Standard Lemmy UI on port 8080 (HTTP) and 8443 (HTTPS)
+      - "8080:8536"
+      - "8443:8443"
+    volumes:
+      - ./nginx_internal.conf:/etc/nginx/nginx.conf:ro,Z
+      - ./proxy_params:/etc/nginx/proxy_params:ro,Z
+      - ./cert.pem:/etc/nginx/cert.pem:ro,Z
+      - ./key.pem:/etc/nginx/key.pem:ro,Z
+      - ./badge-injection-dynamic.js:/etc/nginx/badge-injection.js:ro,Z
+    restart: always
+    logging: *default-logging
+    depends_on:
+      - pictrs
+      - lemmy-ui
+
+  lemmy:
+    image: dessalines/lemmy:0.19.12
+    hostname: lemmy
+    restart: always
+    logging: *default-logging
+    environment:
+      - RUST_LOG="warn"
+    volumes:
+      - ./lemmy.hjson:/config/config.hjson:Z
+    depends_on:
+      - postgres
+      - pictrs
+
+  lemmy-ui:
+    image: dessalines/lemmy-ui:0.19.12
+    environment:
+      - LEMMY_UI_LEMMY_INTERNAL_HOST=lemmy:8536
+      - LEMMY_UI_LEMMY_EXTERNAL_HOST=${HOSTNAME}
+      - LEMMY_UI_HTTPS=false
+    volumes:
+      - ./volumes/lemmy-ui/extra_themes:/app/extra_themes
+    depends_on:
+      - lemmy
+    restart: always
+    logging: *default-logging
+
+  pictrs:
+    image: asonix/pictrs:0.5.19
+    # this needs to match the pictrs url in lemmy.hjson
+    hostname: pictrs
+    environment:
+      - PICTRS_OPENTELEMETRY_URL=http://otel:4137
+      - PICTRS__SERVER__API_KEY=${PICTRS_API_KEY}
+      - RUST_BACKTRACE=full
+      - PICTRS__MEDIA__VIDEO__VIDEO_CODEC=vp9
+      - PICTRS__MEDIA__ANIMATION__MAX_WIDTH=256
+      - PICTRS__MEDIA__ANIMATION__MAX_HEIGHT=256
+      - PICTRS__MEDIA__ANIMATION__MAX_FRAME_COUNT=400
+    user: 991:991
+    volumes:
+      - ./volumes/pictrs:/mnt:Z
+    restart: always
+    logging: *default-logging
+
+  postgres:
+    image: pgautoupgrade/pgautoupgrade:17-alpine
+    hostname: postgres
+    environment:
+      - POSTGRES_USER=lemmy
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=lemmy
+    shm_size: 1g
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data:Z
+      - ./customPostgresql.conf:/etc/postgresql.conf
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: always
+    logging: *default-logging
+
+  postfix:
+    image: mwader/postfix-relay
+    environment:
+      - POSTFIX_myhostname=${HOSTNAME}
+    restart: "always"
+    logging: *default-logging
+
+  alexandrite:
+    image: ghcr.io/sheodox/alexandrite:latest
+    hostname: alexandrite
+    environment:
+      - ALEXANDRITE_DEFAULT_INSTANCE=${HOSTNAME}
+      - ALEXANDRITE_WELCOME_LEMMY_HELP=false
+      - ALEXANDRITE_WELCOME_INSTANCE_HELP=false
+      - ALEXANDRITE_FORCE_INSTANCE=${HOSTNAME}
+    restart: always
+    logging: *default-logging
+
+  alexandrite-proxy:
+    image: nginx:1-alpine
+    ports:
+      # Alexandrite as default on port 80 and 443
+      - "80:3001"
+      - "443:443"
+    volumes:
+      - ./nginx_alexandrite.conf:/etc/nginx/nginx.conf:ro,Z
+      - ./cert.pem:/etc/nginx/cert.pem:ro,Z
+      - ./key.pem:/etc/nginx/key.pem:ro,Z
+      - ./badge-injection-dynamic.js:/etc/nginx/badge-injection.js:ro,Z
+    restart: always
+    logging: *default-logging
+    depends_on:
+      - alexandrite
+
+  custom-frontend:
+    image: nginx:1-alpine
+    ports:
+      # Enhanced frontend with badges and gamification on port 3000
+      - "3000:80"
+    volumes:
+      - ./enhanced-frontend-with-badges.html:/usr/share/nginx/html/index.html:ro
+    restart: always
+    logging: *default-logging
+
+  badge-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.badge-api
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=lemmy
+      - DB_USER=lemmy
+      - DB_PASS=${POSTGRES_PASSWORD}
+      - BADGE_API_KEY=${BADGE_API_KEY}
+    depends_on:
+      - postgres
+    restart: always
+    logging: *default-logging
